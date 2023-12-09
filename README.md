@@ -15,6 +15,14 @@ npm run serve
 npm run build
 ```
 
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+# my_vue_project
 
 ### Build Docker Image
 ```
@@ -25,12 +33,3 @@ docker build -t myapp .
 ```
 docker run -it -p 8080:8080 --rm --name myapp myapp
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-# my_vue_project
