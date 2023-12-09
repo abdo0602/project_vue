@@ -15,6 +15,17 @@ npm run serve
 npm run build
 ```
 
+
+### Build Docker Image
+```
+docker build -t myapp .
+```
+
+### Run Docker Image
+```
+docker run -it -p 8080:8080 --rm --name myapp myapp
+```
+
 ### Lints and fixes files
 ```
 npm run lint
