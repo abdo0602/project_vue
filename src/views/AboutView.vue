@@ -10,7 +10,7 @@
     </label>
     <label for="taux">
       <select name="type" id="type">
-        <option v-for="x in taux" v-bind:key="x" v-bind:value="x">{{ x }}</option>
+        <option v-for="x in taux" v-bind:key="x" v-bind:value="x.taux">{{ x.nomCategorie }}</option>
       </select>
     </label>
     <button @click="calculate">calculate</button>
@@ -30,7 +30,8 @@ const x = yourDate.toISOString().split('T')[0];
 export default defineComponent({
   name: 'UserView',
   mounted() {
-    axios.get('127.0.0.1/categorie/all').then((res) => { for (const [key, values] of Object.entries(res)) { this.taux.push(values); } }).catch(alert('can\'t reach server'), this.taux.push(15), this.taux.push(25), this.taux.push(30));
+    axios.get('127.0.0.1/categorie/all').then((res) => { for (obj of Object.entries(res)) { this.taux.push(obj); } })
+    .catch(alert('can\'t reach server'),this.taux.push({"id": 0, "nomCategorie": "villa", "taux": 2.5}),this.taux.push({"id": 0, "nomCategorie": "test", "taux": 1.5}));
   },
   data() {
     return {
