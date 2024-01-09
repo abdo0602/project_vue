@@ -65,6 +65,7 @@ export default defineComponent({
         border-top: 1px black dotted;
   }
   #calculator{
+    margin-top: 150px;
     width: 100%;
     display: flex;
     flex-direction: column;
