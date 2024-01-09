@@ -34,7 +34,7 @@ export default defineComponent({
     .catch((err) => {
       alert(err.message);
       this.taux.push({"id": 0, "nomCategorie": "villa", "taux": 2.5});
-      this.taux.push({"id": 0, "nomCategorie": "test", "taux": 1.5});
+      this.taux.push({"id": 0, "nomCategorie": "maison", "taux": 1.5});
     });
   },
   data() {
