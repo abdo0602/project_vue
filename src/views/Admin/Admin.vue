@@ -264,7 +264,9 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
+    overflow: scroll;
+    overflow-x: hidden;
+  }
 .testForm table{
   position: absolute;
   top: 0;
