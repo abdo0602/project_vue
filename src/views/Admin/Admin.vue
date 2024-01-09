@@ -2,14 +2,13 @@
     <div>
         <div :class='{isntlogged: !loggedIn, islogged: loggedIn}' v-if='!error'>
             <form>
-                <p>log in</p>
                 <label for='username'>
-                    <input type='text' placeholder='username' class='creds' v-model='userName'/>
+                    <input type='text' placeholder='username' class='creds' v-model='userName' />
                 </label>
                 <label for='password'>
                     <input type='password' placeholder='********' class='creds' v-model='pass'/>
                 </label>
-                <input type='submit' @click.prevent='login' />
+                <input type='submit' @click.prevent='login' class="btn btn-success" value="Submit"/>
             </form>
         </div>
         <div v-else class='isntlogged'>
@@ -18,21 +17,49 @@
         <div :class='{isntlogged: loggedIn, islogged: !loggedIn}'>
             <div class="pop_up_container" @click="hidePop" v-if="pop_up" @keyPress={handleClick}>
               <div class="pop_up" @click.stop.prevent="" @keyPress={handleClick}>
-                <ul>
-                  <li>Mr {{ pop_obj.nom }}, {{ pop_obj.prenom }}</li>
-                  <li>{{ pop_obj.addresse }}</li>
-                  <button @click.prevent="payTax(pop_obj)">Pay Tax</button>
-                </ul>
+                <table class="table">
+                <thead>
+                <tr>
+                  <th>Terrain</th>
+                  <th>Surface</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                  <th>Mr {{ pop_obj.nom }}, {{ pop_obj.prenom }}</th>
+                  <th>{{ pop_obj.addresse }}</th>
+                  <th>
+                  <button @click.prevent="payTax(pop_obj)" style="width: 70px;"
+                   class="btn btn-primary">
+                  Pay</button>
+                  </th>
+                </tr>
+                </tbody>
+                </table>
               </div>
             </div>
             <div class='adminInterface'>
                 <div class='testForm'>
-                  <ul>
-                    <li v-for="obj in redevables" v-bind:key="obj"><p>{{ obj.nom }}</p>
-                      <p>{{ obj.prenom }}</p>
-                      <p>{{ obj.addresse }}</p>
-                      <div @click.prevent="showPop(obj)" @keyPress={handleClick}>Interact</div></li>
-                  </ul>
+                  <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Terrain</th>
+                    <th>Surface</th>
+                    <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="obj in redevables" v-bind:key="obj">
+                      <td>{{ obj.nom }}</td>
+                      <td>{{ obj.prenom }}</td>
+                      <td>{{ obj.addresse }}</td>
+                      <td><button @click.prevent="showPop(obj)"
+                        @keyPress={handleClick} class="btn btn-info">
+                        Interract</button></td>
+                    </tr>
+                  </tbody>
+                </table>
                 </div>
                 <div class='adminForm'>
                     <p>Add a user to the database</p>
@@ -171,10 +198,8 @@ export default defineComponent({
 .pop_up button{
   width: 20%;
   height: 30px;
-  background-color: lime;
 }
 .pop_up button:hover{
-  background-color: green;
   cursor: pointer;
 }
 .isntlogged{
