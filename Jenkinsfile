@@ -22,5 +22,10 @@ pipeline {
         sh 'npm run build'
       }
     }
+    stage('Build Docker') {
+      steps {
+        sh 'docker build -t myapp .'
+      }
+    }
   }
 }
