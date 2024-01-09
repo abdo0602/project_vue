@@ -8,33 +8,69 @@
                 <label for="date">
                     <input type="date" v-model="date" />
                 </label>
-                <input type="submit" @click.prevent="getterrains" value="submit form"/>
+                <input type="submit" @click.prevent="getterrains" value="submit form"
+                class="btn btn-success"/>
         </form>
     </nav>
     <div class="pop_up_container" @click="pop_up = false" v-if="pop_up" @keyPress={handleClick}>
       <div class="pop_up" @click.stop.prevent="" @keyPress={handleClick}>
-        <ul>
-          <li>{{ pop_obj.terrainID }}</li>
-          <li>{{ pop_obj.adresse }}</li>
-          <button @click.prevent="submit">submit</button>
-        </ul>
+        <table class="table">
+    <thead>
+      <tr>
+        <th>Terrain</th>
+        <th>Surface</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{ pop_obj.terrainID }}</td>
+          <td>{{ pop_obj.adresse }}</td>
+          <td><button @click.prevent="submit" class="btn btn-primary" style="width: 70px;">
+            submit</button></td>
+        </tr>
+        </tbody>
+        </table>
       </div>
     </div>
     <div id="data" v-if="!data_in">
-        <ul>
-          <li v-for="obj in terrains" v-bind:key="obj">
-            <p>{{ obj.addresse }}</p>
-            <div @click.prevent="selectObj(obj)" @keyPress={handleClick}>Interract</div>
-          </li>
-        </ul>
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Terrain</th>
+        <th>Surface</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="obj in terrains" v-bind:key="obj">
+        <td>{{ obj.addresse }}</td>
+        <td>{{ obj.surface }}</td>
+        <td><button @click.prevent="selectObj(obj)" @keyPress={handleClick}
+           class="btn btn-info">Interract</button></td>
+      </tr>
+    </tbody>
+    </table>
     </div>
     <div id="datatest" v-else-if="tax != 0">
-        <ul>
-          <li>Mr. {{ name }}</li>
-          <li>cin: {{ cin }}</li>
-          <li>Date : {{ next_date }}</li>
-          <li>Taxes : {{ tax }}</li>
-        </ul>
+      <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Cin</th>
+        <th>Date</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Mr. {{ name }}</td>
+        <td>cin: {{ cin }}</td>
+        <td>Date : {{ next_date }}</td>
+        <td>Taxes : {{ tax }}</td>
+      </tr>
+    </tbody>
+    </table>
         <Bar :options="chartOptions" :data="chartData"/> </div>
         <div id="data" v-else><p>Mr. {{ name }} owner of the land No° {{ terrain }} with
            the id card number {{ cin }} paid all his taxes </p></div>
@@ -167,57 +203,22 @@ export default defineComponent({
       text-align: left;
     }
     #data{
-        position: relative;
-        height: 50%;
-        width: 75%;
-        top:-80%;
+        position: absolute;
+        height: 100%;
+        width: 80%;
+        top:0%;
         left: 20%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        overflow: scroll;
+        overflow-x: hidden;
     }
-    #data ul{
-      width: 100%;
+    #data table{
+      position: absolute;
+      top: 0;
     }
-    #data li{
-      display: flex;
-      width: 100%;
-      height: 20%;
-      border-top: 1pt black dotted;
-      border-left: 1pt black dotted;
-    }
-    #data li:last-child{
-      border-bottom: 1pt black dotted;
-    }
-    #data li *{
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    #data li div{
-      flex-grow:1;
-      background-color: lime;
-      border-right: 1pt black dotted;
-      border-radius: 25% 0 0 0;
-    }
-    #data li p{
-      flex-grow: 8;
-    }
-    #data li div:hover{background-color: green;}
-    .pop_up_container{
-  background-color: rgba(40, 40, 40, 0.7);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 20%;
-  right: 0;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .pop_up{
   background-color: rgba(230, 230, 230, 0.7);
   width: 70%;
@@ -232,10 +233,8 @@ export default defineComponent({
 .pop_up button{
   width: 20%;
   height: 30px;
-  background-color: lime;
 }
 .pop_up button:hover{
-  background-color: green;
   cursor: pointer;
 }
 </style>
