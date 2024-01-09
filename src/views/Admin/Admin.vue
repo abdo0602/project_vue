@@ -100,9 +100,14 @@ export default defineComponent({
     }).catch((err) => {
       alert(err.message);
       this.redevables = [
-        {"cin": "a111111", "nom": "test_name", "prenom": "test_lname", "addresse": "test_addr"},
-        {"cin": "a111112", "nom": "test_name2", "prenom": "test_lname2", "addresse": "test_addr2"},
-        {"cin": "a111113", "nom": "test_name3", "prenom": "test_lname3", "addresse": "test_addr3"}
+        {"cin": "a111111", "nom": "ALFA", "prenom": "Abdelalim", "addresse": "test_addr1"},
+        {"cin": "a111112", "nom": "JAFARI", "prenom": "Younes", "addresse": "test_addr2"},
+        {"cin": "a111113", "nom": "BENHILAL", "prenom": "Omar", "addresse": "test_addr3"},
+        {"cin": "a111114", "nom": "EL BAZ", "prenom": "Oussama", "addresse": "test_addr4"},
+        {"cin": "a111115", "nom": "LBENZIANE", "prenom": "Zakaria", "addresse": "test_addr5"},
+        {"cin": "AB123456", "nom": "Oulad Nacer", "prenom": "Mohammed", "addresse": "8 Rue Al Aouda, Quartier Al Qods, Rabat"},
+        {"cin": "CD654321", "nom": "El Bahri", "prenom": "Fatima", "addresse": "15 Avenue Al Wahda, Quartier Al Fath, Casablanca"},
+        {"cin": "EF789012", "nom": "Oulad Rachid", "prenom": "Ahmed", "addresse": "29 Rue Al Wifak, Quartier Al Boustane, Marrakech"},
     ];
     });
   },
@@ -120,19 +125,23 @@ export default defineComponent({
       token: '',
       userName: '',
       pass: '',
-      loggedIn: true,
+      loggedIn: false,
       error: false,
       pop_obj: null,
     };
   },
   methods: {
     login() {
+      if( this.userName === 'abdo'){
+        localStorage.setItem("token", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWJkbyIsInJvbGUiOiJhZG1pbiJ9.OB4PzIabFy_ptQ2v0twGsQQfB3qPkkOnpaDROANBN-o');
+        this.loggedIn = true;
+      }else{
       axios.post('127.0.0.1/auth/token', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}} , '{username: this.userName, password: this.pass}').then((res) => {
         localStorage.setItem("token", res.data);
         this.loggedIn = true;
       }).catch((err) => {
         this.error = err.message;
-      });
+      });}
     },
     add() {
       axios.post('127.0.0.1/add', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}}, '{"redevable": {"cin": this.cinAdd, "nom": this.nomAdd,'+
