@@ -99,10 +99,10 @@ export default defineComponent({
       pop_obj: null,
       pop_up: false,
       cin: 'testing value',
-      name: 'aaaaa',
+      name: 'Omar Benhilal',
       next_date: x.split('-')[0],
       date: x,
-      tax: 100,
+      tax: 2650,
       terrain: 1,
       terrains: [],
       data_in: false,
@@ -128,9 +128,9 @@ export default defineComponent({
         this.terrains = res.data;
       }).catch((err) => {
         alert(err.message);
-        this.terrains.push({"terrainID": 1, "surface": 250, "addresse": "terrain 1"});
-        this.terrains.push({"terrainID": 1, "surface": 250, "addresse": "terrain 1"});
-        this.terrains.push({"terrainID": 1, "surface": 250, "addresse": "terrain 1"});
+        this.terrains.push({"terrainID": 1, "surface": 1250, "addresse": "terrain_addr_1"});
+        this.terrains.push({"terrainID": 12, "surface": 2500, "addresse": "terrain_addr_2"});
+        this.terrains.push({"terrainID": 3, "surface": 3600, "addresse": "terrain_addr_3"});
       })
     },
     submit() {
@@ -144,7 +144,7 @@ export default defineComponent({
       } ).catch((err) => {
         alert(err.message);
         this.data_in = true;
-        this.tax = 100;
+        this.tax = 1650;
         this.pop_up = false;
       });
     },
