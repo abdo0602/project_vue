@@ -44,8 +44,9 @@
                   <table class="table">
                   <thead>
                   <tr>
-                    <th>Terrain</th>
-                    <th>Surface</th>
+                    <th>Name</th>
+                    <th>1st Name</th>
+                    <th>Adress</th>
                     <th>Action</th>
                     </tr>
                   </thead>
@@ -264,43 +265,8 @@ export default defineComponent({
     flex-direction: column;
     justify-content: center;
 }
-ul{
-      width: 90%;
-      margin: 0;
-    }
-li {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-li *{
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-}
-li p{
-  flex-grow: 4;
-}
-li div{
-      flex-grow:1;
-      background-color: lime;
-      border-right: 1pt black dotted;
-      border-radius: 25% 0 0 0;
-      height: 100%;
-}
-li div:hover{
-  background-color: green;
-  cursor: pointer;
-}
-li:last-child{
-      border-bottom: 1pt black dotted;
-}
-li{
-      display: flex;
-      width: 100%;
-      height: 20%;
-      border-top: 1pt black dotted;
-      border-left: 1pt black dotted;
+.testForm table{
+  position: absolute;
+  top: 0;
 }
 </style>
