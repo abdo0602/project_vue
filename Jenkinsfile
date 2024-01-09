@@ -32,7 +32,7 @@ pipeline {
                 withDockerRegistry([credentialsId: "docker_hub", url: "https://index.docker.io/v1/"]) {
                     script {
                         // Assuming your Dockerfile is in the root directory
-                        app = docker.build("asecurityguru/testeb:latest")
+                        app = docker.build("yazoo2023/vue:latest")
                     }
                 }
             }
