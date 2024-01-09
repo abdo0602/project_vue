@@ -16,22 +16,40 @@
             <p>Host unreachable with because: {{ error }}</p>
         </div>
         <div :class='{isntlogged: loggedIn, islogged: !loggedIn}'>
+            <div class="pop_up_container" @click="hidePop" v-if="pop_up" @keyPress={handleClick}>
+              <div class="pop_up" @click.stop.prevent="" @keyPress={handleClick}>
+                <ul>
+                  <li>Mr {{ pop_obj.nom }}, {{ pop_obj.prenom }}</li>
+                  <li>{{ pop_obj.addresse }}</li>
+                  <button @click.prevent="payTax(pop_obj)">Pay Tax</button>
+                </ul>
+              </div>
+            </div>
             <div class='adminInterface'>
                 <div class='testForm'>
                   <ul>
                     <li v-for="obj in redevables" v-bind:key="obj"><p>{{ obj.nom }}</p>
                       <p>{{ obj.prenom }}</p>
-                      <p>{{ obj.addresse }}</p><div>Interact</div></li>
+                      <p>{{ obj.addresse }}</p>
+                      <div @click.prevent="showPop(obj)" @keyPress={handleClick}>Interact</div></li>
                   </ul>
                 </div>
                 <div class='adminForm'>
                     <p>Add a user to the database</p>
                     <form>
-                        <label for='user'>
-                            <input type='text' name='user' placeholder='user' />
+                        <label for='nomAdd'>
+                          <input type='text' name='nomAdd' placeholder='nom' v-model="nomAdd"/>
                         </label>
-                        <label for='cin'>
-                            <input type='text' name='cin' placeholder='cin'>
+                        <label for='prenomAdd'>
+                          <input type='text' name='prenomAdd' placeholder='prenom'
+                           v-model="prenomAdd"/>
+                        </label>
+                        <label for='adresseAdd'>
+                          <input type='text' name='adresseAdd' placeholder='addresse'
+                           v-model="adresseAdd"/>
+                        </label>
+                        <label for='cinAdd'>
+                          <input type='text' name='cin' placeholder='cinAdd'>
                         </label>
                         <button @click.prevent='add'>add</button>
                     </form>
@@ -57,13 +75,17 @@ export default defineComponent({
         {"cin": "a111111", "nom": "test_name", "prenom": "test_lname", "addresse": "test_addr"},
         {"cin": "a111112", "nom": "test_name2", "prenom": "test_lname2", "addresse": "test_addr2"},
         {"cin": "a111113", "nom": "test_name3", "prenom": "test_lname3", "addresse": "test_addr3"}
-    ]
+    ];
     });
   },
   data() {
     return {
+      nomAdd: '',
+      prenomAdd: '',
+      adresseAdd: '',
+      cinAdd:'',
       redevables: [],
-      cinToPay: '',
+      pop_up: false,
       terrain: '',
       cin: '',
       name: '',
@@ -72,28 +94,39 @@ export default defineComponent({
       pass: '',
       loggedIn: true,
       error: false,
+      pop_obj: null,
     };
   },
   methods: {
     login() {
-      axios.post('127.0.0.1/login', '{username: this.userName, password: this.pass}').then((res) => {
-        this.token = res.token;
+      axios.post('127.0.0.1/auth/token', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}} , '{username: this.userName, password: this.pass}').then((res) => {
+        localStorage.setItem("token", res.data);
         this.loggedIn = true;
       }).catch((err) => {
         this.error = err.message;
       });
     },
     add() {
-      axios.post('127.0.0.1/add', '{cin: this.cin, name: this.name}').then((res) => {
+      axios.post('127.0.0.1/add', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}}, '{"redevable": {"cin": this.cinAdd, "nom": this.nomAdd,'+
+      '"prenom": this.prenomAdd, "adresse": this.adresseAdd}}')
+      .then((res) => {
         if (res.status === 200) {
-          alert(res.message);
+          alert('redevable ajouté');
         }
       }).catch((err) => {
         alert(err.message);
       });
     },
-    pay() {
-      axios.post('/pay', '{terrain: this.terrain, cin: this.cinToPay, token: this.token}')
+    hidePop() {
+      this.pop_up = false;
+    },
+    showPop(obj) {
+      this.pop_obj = obj;
+      this.pop_up = true;
+    },
+    payTax(obj) {
+      axios.post('/pay', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}},
+       '{obj.cin, token: this.token}')
         .then((res) => {
           if (res.status === 200) {
             alert('tax paid');
@@ -102,12 +135,48 @@ export default defineComponent({
         .catch((err) => {
           alert(err.message);
         });
+      alert('tryin to pay land Taxes of Mr: ' + obj.nom + ', endpoint not implemented yet');
+    },
+    handleClick() {
+      console.log("");
     },
   },
 });
 </script>
 
 <style>
+.pop_up_container{
+  background-color: rgba(40, 40, 40, 0.7);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20%;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pop_up{
+  background-color: rgba(230, 230, 230, 0.7);
+  width: 70%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  
+}
+.pop_up *{
+  border: 0;
+}
+.pop_up button{
+  width: 20%;
+  height: 30px;
+  background-color: lime;
+}
+.pop_up button:hover{
+  background-color: green;
+  cursor: pointer;
+}
 .isntlogged{
     position: absolute;
     top: 10%;
@@ -195,7 +264,10 @@ li div{
       border-radius: 25% 0 0 0;
       height: 100%;
 }
-li div:hover{background-color: green;}
+li div:hover{
+  background-color: green;
+  cursor: pointer;
+}
 li:last-child{
       border-bottom: 1pt black dotted;
 }
