@@ -2,7 +2,6 @@
     <div id="userapp">
         <nav id="datanav">
             <form>
-              {{ terrain }}
                 <label for="cin">
                     <input type="text" v-model="cin" />
                 </label>
@@ -12,15 +11,24 @@
                 <input type="submit" @click.prevent="getterrains" value="submit form"/>
         </form>
     </nav>
+    <div class="pop_up_container" @click="pop_up = false" v-if="pop_up" @keyPress={handleClick}>
+      <div class="pop_up" @click.stop.prevent="" @keyPress={handleClick}>
+        <ul>
+          <li>{{ pop_obj.terrainID }}</li>
+          <li>{{ pop_obj.adresse }}</li>
+          <button @click.prevent="submit">submit</button>
+        </ul>
+      </div>
+    </div>
     <div id="data" v-if="!data_in">
         <ul>
           <li v-for="obj in terrains" v-bind:key="obj">
             <p>{{ obj.addresse }}</p>
-            <div @click.prevent="terrain = obj.terrainID" @keyPress={handleClick}>Interract</div>
+            <div @click.prevent="selectObj(obj)" @keyPress={handleClick}>Interract</div>
           </li>
         </ul>
     </div>
-    <div id="datatest" v-else-if="hasTaxe">
+    <div id="datatest" v-else-if="tax != 0">
         <ul>
           <li>Mr. {{ name }}</li>
           <li>cin: {{ cin }}</li>
@@ -52,16 +60,16 @@ export default defineComponent({
   components: { Bar },
   data() {
     return {
+      pop_obj: null,
+      pop_up: false,
       cin: 'testing value',
       name: 'aaaaa',
-      hasTaxe: true,
       next_date: x.split('-')[0],
       date: x,
-      tax: 0,
+      tax: 100,
       terrain: 1,
-      terrains: [{id: 1, surface: 250, addr: "terrain 1"}, {id: 2, surface: 250, addr: "terrain 1"}
-      , {id: 3, surface: 250, addr: "terrain 1"}],
-      data_in: true,
+      terrains: [],
+      data_in: false,
       chartData: {
         labels: [x.split('-')[0] - 2, x.split('-')[0] - 1, x.split('-')[0]],
         datasets: [{ data: [40, 20, 12] }],
@@ -72,24 +80,37 @@ export default defineComponent({
     };
   },
   methods: {
+    selectObj(obj) {
+      this.pop_obj = obj;
+      this.pop_up = true;
+    },
     handleClick() {
       console.log("");
     },
     getterrains() {
-      axios.get('127.0.0.1/terrain/proprietaire' + this.cin).then(res => {
-        this.terrains = res;
-      }).catch((err) => {alert(err.message)})
+      axios.get('http://127.0.0.1/terrain/proprietaire' + this.cin).then(res => {
+        this.terrains = res.data;
+      }).catch((err) => {
+        alert(err.message);
+        this.terrains.push({"terrainID": 1, "surface": 250, "addresse": "terrain 1"});
+        this.terrains.push({"terrainID": 1, "surface": 250, "addresse": "terrain 1"});
+        this.terrains.push({"terrainID": 1, "surface": 250, "addresse": "terrain 1"});
+      })
     },
-    lookup() {
-      axios.get('127.0.0.1/' + this.terrain + '/is-tax-paid', { params: { year: this.year } }).then((res) => {
+    submit() {
+      axios.get('http://127.0.0.1/' + this.pop_obj.terrainID + '/is-tax-paid', { params: { year: this.year } }).then((res) => {
         this.data_in = true;
-        this.hasTaxe = !res;
         if(res == true) {
-          axios.get('127.0.0.1/' + this.terrain + '/calculate-tax').then((res) => {
-            this.tax = res;
-          }).catch(alert('can\'t connect to remote host'));
+          axios.get('http://127.0.0.1/' + this.pop_obj.terrainID + '/calculate-tax').then((res) => {
+            this.tax = res.data;
+          }).catch((err) => alert(err.message));
         }
-      } ).catch(alert('can\'t connect to remoste host'));;
+      } ).catch((err) => {
+        alert(err.message);
+        this.data_in = true;
+        this.tax = 100;
+        this.pop_up = false;
+      });
     },
   },
 });
@@ -135,6 +156,15 @@ export default defineComponent({
     #datatest ul{
       margin-right: 15px;
       text-align: left;
+      border: 1px black dotted;
+      margin-left: 2px;
+      position: relative;
+      left: 10px;
+      top: -40px;
+    }
+    #datatest li{
+      border: 0;
+      text-align: left;
     }
     #data{
         position: relative;
@@ -176,4 +206,36 @@ export default defineComponent({
       flex-grow: 8;
     }
     #data li div:hover{background-color: green;}
+    .pop_up_container{
+  background-color: rgba(40, 40, 40, 0.7);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20%;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pop_up{
+  background-color: rgba(230, 230, 230, 0.7);
+  width: 70%;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  
+}
+.pop_up *{
+  border: 0;
+}
+.pop_up button{
+  width: 20%;
+  height: 30px;
+  background-color: lime;
+}
+.pop_up button:hover{
+  background-color: green;
+  cursor: pointer;
+}
 </style>
