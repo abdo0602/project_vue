@@ -3,17 +3,17 @@
     <h1>Application to calculate taxes on unbuilt lands</h1>
   <div id="calculator">
     <label for="surface">
-      <input type="text" v-model="surface" placeholder="surfface">
+      <input type="text" v-model="surface" placeholder="surfface" class="form-control">
     </label>
     <label for="date">
-      <input type="date" v-model="date">
+      <input type="date" v-model="date" class="form-control">
     </label>
     <label for="taux">
-      <select name="type" id="type">
+      <select name="type" id="type" class="form-control">
         <option v-for="x in taux" v-bind:key="x" v-bind:value="x.taux">{{ x.nomCategorie }}</option>
       </select>
     </label>
-    <button @click="calculate">calculate</button>
+    <button @click="calculate" class="btn btn-success">calculate</button>
     <p>{{ taxe }}</p>
   </div>
   </div>
@@ -31,7 +31,11 @@ export default defineComponent({
   name: 'UserView',
   mounted() {
     axios.get('127.0.0.1/categorie/all').then((res) => { for (obj of Object.entries(res)) { this.taux.push(obj); } })
-    .catch(alert('can\'t reach server'),this.taux.push({"id": 0, "nomCategorie": "villa", "taux": 2.5}),this.taux.push({"id": 0, "nomCategorie": "test", "taux": 1.5}));
+    .catch((err) => {
+      alert(err.message);
+      this.taux.push({"id": 0, "nomCategorie": "villa", "taux": 2.5});
+      this.taux.push({"id": 0, "nomCategorie": "test", "taux": 1.5});
+    });
   },
   data() {
     return {
@@ -74,5 +78,10 @@ export default defineComponent({
   }
   #calculator button{
     width: 15%;
+  }
+  label{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
