@@ -27,5 +27,26 @@ pipeline {
         sh 'docker build -t myapp .'
       }
     }
+    stage('Build') {
+            steps {
+                withDockerRegistry([credentialsId: "docker_hub", url: "https://index.docker.io/v1/"]) {
+                    script {
+                        // Assuming your Dockerfile is in the root directory
+                        app = docker.build("asecurityguru/testeb:latest")
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            // Push the image to Docker Hub
+            script {
+                docker.withRegistry('https://index.docker.io/v1/', 'docker_hub') {
+                    app.push()
+                }
+            }
+        }
   }
 }
