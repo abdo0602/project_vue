@@ -27,7 +27,7 @@ pipeline {
         sh 'docker build -t myapp .'
       }
     }
-    stage('Build') {
+    stage('Docker Build') {
             steps {
                 withDockerRegistry([credentialsId: "docker_hub", url: "https://index.docker.io/v1/"]) {
                     script {
