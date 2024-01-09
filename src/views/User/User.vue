@@ -65,9 +65,9 @@
     <tbody>
       <tr>
         <td>Mr. {{ name }}</td>
-        <td>cin: {{ cin }}</td>
-        <td>Date : {{ next_date }}</td>
-        <td>Taxes : {{ tax }}</td>
+        <td>{{ cin }}</td>
+        <td>{{ next_date }}</td>
+        <td>{{ tax }}</td>
       </tr>
     </tbody>
     </table>
